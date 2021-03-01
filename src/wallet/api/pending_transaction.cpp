@@ -262,6 +262,17 @@ std::vector<std::string> PendingTransactionImpl::signersKeys() const {
     return keys;
 }
 
+std::vector<std::string> PendingTransactionImpl::dest_addresses() const {
+    std::vector<tools::wallet2::pending_tx> txs = m_pending_tx;
+    std::vector<std::string> result;
+    for(tools::wallet2::pending_tx tx : txs) {
+       for (cryptonote::tx_destination_entry dest : tx.dests) {
+           result.push_back(get_account_address_as_str(m_wallet.m_wallet->nettype(), dest.is_subaddress, dest.addr));
+       }
+    }
+    return result;
+}
+
 }
 
 namespace Bitmonero = Monero;
